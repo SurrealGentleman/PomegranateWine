@@ -17,8 +17,15 @@ jobs:
         key: ${{ secrets.PRIVATE_KEY }} # Приватный ключ для SSH, берется из секретов Github
         port: 22 # Порт для SSH-подключения (по умолчанию 22)
         script: |
-          cd ~/PomegranateWine # Переход в директорию с проектом на сервере
-          git pull origin main # Вытягивание последних изменений из ветки main
-          git status # Проверка состояния git-репозитория
-          poetry install # Установка только продакшн-зависимостей
-          poetry run python main.py # Перезапуск процесса tg-bot с помощью PM2
+          cd ~/PomegranateWine
+          git pull origin main
+          # Проверка и установка poetry
+          if ! command -v poetry &> /dev/null
+          then
+            curl -sSL https://install.python-poetry.org | python3 -
+              export PATH="$HOME/.local/bin:$PATH"
+          fi
+          # Установка зависимостей
+          poetry install --no-root
+          # Запуск бота в фоне
+          nohup poetry run python main.py > bot.log 2>&1 &
