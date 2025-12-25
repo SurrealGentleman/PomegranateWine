@@ -5,4 +5,4 @@ router = Router()
 
 @router.message(CommandStart())
 async def cmd_start(message: types.Message):
-    await message.answer("ПОКА")
+    await message.answer("ПРИВЕТ")
