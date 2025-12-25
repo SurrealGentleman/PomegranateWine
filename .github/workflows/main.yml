@@ -19,13 +19,5 @@ jobs:
         script: |
           cd ~/PomegranateWine
           git pull origin main
-          # Проверка и установка poetry
-          if ! command -v poetry &> /dev/null
-          then
-            curl -sSL https://install.python-poetry.org | python3 -
-              export PATH="$HOME/.local/bin:$PATH"
-          fi
-          # Установка зависимостей
           poetry install --no-root
-          # Запуск бота в фоне
-          nohup poetry run python main.py > bot.log 2>&1 &
+          sudo systemctl restart pomegranatewine
